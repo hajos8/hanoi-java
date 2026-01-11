@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.shape.*?>
 
@@ -33,6 +34,8 @@
 
                 <!-- Smallest disk (size 1) -->
                 <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMouseDragged="#dragDisk" onMousePressed="#selectDisk" onMouseReleased="#dropDisk" width="130.0" />
+            <Button fx:id="restart_button" layoutX="74.0" layoutY="273.0" mnemonicParsing="false" onAction="#restartGame" text="Újrakezdés" visible="false" />
+            <Label fx:id="win_label" layoutX="26.0" layoutY="277.0" text="Nyertél!" visible="false" />
 
             </children>
         </Pane>

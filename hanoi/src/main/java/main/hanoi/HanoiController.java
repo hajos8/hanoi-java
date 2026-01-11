@@ -1,7 +1,9 @@
 package main.hanoi;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.shape.Rectangle;
@@ -9,10 +11,6 @@ import javafx.scene.shape.Rectangle;
 import java.net.URL;
 import java.util.HashMap;
 import java.util.ResourceBundle;
-
-//peg locations 100, 295, 490 and width 10
-
-//disk sizes 130, 160, 190 (65, 80, 95)
 
 public class HanoiController implements Initializable {
     public static boolean isDraggable = false;
@@ -28,6 +26,8 @@ public class HanoiController implements Initializable {
     public static final int[] territories = {100 + (295 - 100) / 2, 295 + (490 - 295) / 2, 600};
 
     @FXML public Rectangle disk1, disk2, disk3;
+    @FXML public Button restart_button;
+    @FXML public Label win_label;
 
     public static HashMap<Integer, Double> widthToNumberMap = new HashMap<>();
 
@@ -41,6 +41,12 @@ public class HanoiController implements Initializable {
             {3, 2, 1}, //peg 1
             {0, 0, 0}, //peg 2
             {0, 0, 0}  //peg 3
+    };
+
+    public static int[][] winningDiskLayout = {
+            {0, 0, 0}, //peg 1
+            {0, 0, 0}, //peg 2
+            {3, 2, 1}  //peg 3
     };
 
     public void selectDisk(MouseEvent mouseEvent) {
@@ -115,9 +121,9 @@ public class HanoiController implements Initializable {
             }
         }
 
-        System.out.println("Can be droppable: " + canBeDroppable);
-        System.out.println("New peg number: " + newPegNumber);
-        System.out.println("New location: " + newLocation);
+        //System.out.println("Can be droppable: " + canBeDroppable);
+        //System.out.println("New peg number: " + newPegNumber);
+        //System.out.println("New location: " + newLocation);
 
         if(!canBeDroppable){
             //put back
@@ -163,6 +169,8 @@ public class HanoiController implements Initializable {
             rectangle.setX((newPegNumber - defaultX) * 195.0);
             rectangle.setY((newLocation - defaultY) * -20.0);
         }
+
+        CheckIfTheGameEnded();
     }
 
     public void dragDisk(MouseEvent mouseEvent) {
@@ -200,6 +208,60 @@ public class HanoiController implements Initializable {
             }
         }
         return -1;
+    }
+
+    public void CheckIfTheGameEnded(){
+        int matches = 0;
+        for(int i = 0; i < diskLayout.length; i++){
+            for(int j = 0; j < diskLayout[i].length; j++){
+                if(diskLayout[i][j] == winningDiskLayout[i][j]){
+                    matches++;
+                }
+            }
+        }
+
+        if(matches == 9){
+            win_label.setVisible(true);
+            restart_button.setVisible(true);
+        }
+    }
+
+    @FXML
+    public void restartGame(ActionEvent actionEvent) {
+        win_label.setVisible(false);
+        restart_button.setVisible(false);
+
+        // restore diskLayout from defaultDiskLayout (deep copy)
+        for (int i = 0; i < defaultDiskLayout.length; i++) {
+            for (int j = 0; j < defaultDiskLayout[i].length; j++) {
+                diskLayout[i][j] = defaultDiskLayout[i][j];
+            }
+        }
+
+        // move each rectangle back to its default position using the same relative logic
+        moveRectangleToDefault(disk1, 1);
+        moveRectangleToDefault(disk2, 2);
+        moveRectangleToDefault(disk3, 3);
+
+        CheckIfTheGameEnded();
+    }
+
+    private void moveRectangleToDefault(Rectangle rectangle, int diskNumber) {
+        int defaultPeg = 0;
+        int defaultStack = 0;
+
+        outer:
+        for (int i = 0; i < defaultDiskLayout.length; i++) {
+            for (int j = 0; j < defaultDiskLayout[i].length; j++) {
+                if (defaultDiskLayout[i][j] == diskNumber) {
+                    defaultPeg = i;
+                    defaultStack = j;
+                    break outer;
+                }
+            }
+        }
+        rectangle.setX((defaultPeg - defaultPeg) * 195.0);
+        rectangle.setY((defaultStack - defaultStack) * -20.0);
     }
 
     @Override
