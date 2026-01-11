@@ -31,6 +31,12 @@ public class HanoiController implements Initializable {
 
     public static HashMap<Integer, Double> widthToNumberMap = new HashMap<>();
 
+    public static final int[][] defaultDiskLayout = {
+            {3, 2, 1}, //peg 1
+            {0, 0, 0}, //peg 2
+            {0, 0, 0}  //peg 3
+    };
+
     public static int[][] diskLayout = {
             {3, 2, 1}, //peg 1
             {0, 0, 0}, //peg 2
@@ -56,7 +62,7 @@ public class HanoiController implements Initializable {
             startingX = rectangle.getX();
             startingY = rectangle.getY();
         }
-        System.out.println(isDraggable);
+        //System.out.println(isDraggable);
     }
 
     public void dropDisk(MouseEvent mouseEvent) {
@@ -99,10 +105,14 @@ public class HanoiController implements Initializable {
             if(diskLayout[newPegNumber][i] == 0 || diskLayout[newPegNumber][i] > diskNumber){
                 canBeDroppable = true;
                 if(diskLayout[newPegNumber][i] != 0){
-                    newLocation = i;
+                    newLocation++;
                 }
             }
         }
+
+        //System.out.println("Can be droppable: " + canBeDroppable);
+        //System.out.println("New peg number: " + newPegNumber);
+        //System.out.println("New location: " + newLocation);
 
         if(!canBeDroppable){
             //put back
@@ -111,15 +121,11 @@ public class HanoiController implements Initializable {
         }
         else{
             //put on another peg
-            int oldX = 0;
-            int oldY = 0;
 
             for(int i = 0; i < diskLayout.length; i++){
                 for(int j = 0; j < diskLayout[i].length; j++){
                     if(diskLayout[i][j] == diskNumber){
                         diskLayout[i][j] = 0;
-                        oldX = i;
-                        oldY = j;
                         break;
                     }
                 }
@@ -136,8 +142,21 @@ public class HanoiController implements Initializable {
             System.out.println();
 
             //move
-            rectangle.setX((newPegNumber - oldX) * 195.0);
-            rectangle.setY((newLocation - oldY) * -20.0);
+            int defaultX = 0;
+            int defaultY = 0;
+
+            for(int i = 0; i < defaultDiskLayout.length; i++){
+                for(int j = 0; j < defaultDiskLayout[i].length; j++){
+                    if(defaultDiskLayout[i][j] == diskNumber){
+                        defaultX = i;
+                        defaultY = j;
+                        break;
+                    }
+                }
+            }
+
+            rectangle.setX((newPegNumber - defaultX) * 195.0);
+            rectangle.setY((newLocation - defaultY) * -20.0);
         }
     }
 
