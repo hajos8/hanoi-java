@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.shape.*?>
+
+<AnchorPane fx:id="root" prefHeight="300.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="main.hanoi.HanoiController">
+
+    <!-- Background board area -->
+    <children>
+        <Pane fx:id="board" prefHeight="300.0" prefWidth="600.0">
+
+            <!-- Pegs (rods) -->
+            <children>
+                <!-- Peg 1 -->
+                <Rectangle fill="#555555" height="180.0" layoutX="100.0" layoutY="80.0" width="10.0" />
+
+                <!-- Peg 2 -->
+                <Rectangle fill="#555555" height="180.0" layoutX="295.0" layoutY="80.0" width="10.0" />
+
+                <!-- Peg 3 -->
+                <Rectangle fill="#555555" height="180.0" layoutX="490.0" layoutY="80.0" width="10.0" />
+
+                <!-- Base -->
+                <Rectangle fill="#333333" height="10.0" layoutY="260.0" width="600.0" />
+
+                <!-- Disks on Peg 1 (from bottom to top) -->
+
+                <!-- Largest disk (size 3) -->
+                <Rectangle fx:id="disk3" arcHeight="10.0" arcWidth="10.0" fill="#ff6666" height="20.0" layoutX="10.0" layoutY="240.0" onMouseDragged="#dragDisk" onMousePressed="#selectDisk" onMouseReleased="#dropDisk" width="190.0" />
+
+                <!-- Medium disk (size 2) -->
+                <Rectangle fx:id="disk2" arcHeight="10.0" arcWidth="10.0" fill="#66ccff" height="20.0" layoutX="25.0" layoutY="220.0" onMouseDragged="#dragDisk" onMousePressed="#selectDisk" onMouseReleased="#dropDisk" width="160.0" />
+
+                <!-- Smallest disk (size 1) -->
+                <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMouseDragged="#dragDisk" onMousePressed="#selectDisk" onMouseReleased="#dropDisk" width="130.0" />
+            <Button fx:id="restart_button" layoutX="74.0" layoutY="273.0" mnemonicParsing="false" onAction="#restartGame" text="Újrakezdés" visible="false" />
+            <Label fx:id="win_label" layoutX="26.0" layoutY="277.0" text="Nyertél!" visible="false" />
+
+            </children>
+        </Pane>
+    </children>
+</AnchorPane>
