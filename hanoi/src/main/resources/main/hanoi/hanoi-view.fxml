@@ -32,7 +32,7 @@
                 <Rectangle fx:id="disk2" arcHeight="10.0" arcWidth="10.0" fill="#66ccff" height="20.0" layoutX="25.0" layoutY="220.0" onMouseDragged="#dragDisk" onMouseReleased="#dropDisk" width="160.0" />
 
                 <!-- Smallest disk (size 1) -->
-                <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMouseDragged="#dragDisk" onMouseReleased="#dropDisk" width="130.0" />
+                <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMouseDragged="#dragDisk" onMousePressed="#selectDisk" onMouseReleased="#dropDisk" width="130.0" />
 
             </children>
         </Pane>
