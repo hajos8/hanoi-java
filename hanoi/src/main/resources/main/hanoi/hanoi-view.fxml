@@ -26,13 +26,13 @@
                 <!-- Disks on Peg 1 (from bottom to top) -->
 
                 <!-- Largest disk (size 3) -->
-                <Rectangle fx:id="disk3" arcHeight="10.0" arcWidth="10.0" fill="#ff6666" height="20.0" layoutX="10.0" layoutY="240.0" width="190.0" />
+                <Rectangle fx:id="disk3" arcHeight="10.0" arcWidth="10.0" fill="#ff6666" height="20.0" layoutX="10.0" layoutY="240.0" onMouseDragged="#dragDisk" onMouseReleased="#dropDisk" width="190.0" />
 
                 <!-- Medium disk (size 2) -->
-                <Rectangle fx:id="disk2" arcHeight="10.0" arcWidth="10.0" fill="#66ccff" height="20.0" layoutX="25.0" layoutY="220.0" width="160.0" />
+                <Rectangle fx:id="disk2" arcHeight="10.0" arcWidth="10.0" fill="#66ccff" height="20.0" layoutX="25.0" layoutY="220.0" onMouseDragged="#dragDisk" onMouseReleased="#dropDisk" width="160.0" />
 
                 <!-- Smallest disk (size 1) -->
-                <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMousePressed="#selected" onMouseReleased="#dropped" width="130.0" />
+                <Rectangle fx:id="disk1" arcHeight="10.0" arcWidth="10.0" fill="#99ff66" height="20.0" layoutX="40.0" layoutY="200.0" onMouseDragged="#dragDisk" onMouseReleased="#dropDisk" width="130.0" />
 
             </children>
         </Pane>
