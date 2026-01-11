@@ -21,6 +21,10 @@ public class HanoiController implements Initializable {
     public static double disk2Width;
     public static double disk3Width;
 
+    public static double startingX;
+    public static double startingY;
+
+    public static final double[] PegXLocations = {100, 295, 490};
     public static final int[] territories = {100 + (295 - 100) / 2, 295 + (490 - 295) / 2, 600};
 
     @FXML public Rectangle disk1, disk2, disk3;
@@ -34,59 +38,107 @@ public class HanoiController implements Initializable {
     };
 
     public void selectDisk(MouseEvent mouseEvent) {
-        int diskNumber = getDiskNumber(mouseEvent);
+        int diskNumber = getDiskNumber((Rectangle) mouseEvent.getSource());
+        int pegNumber = getDisksCurrentPegNumber(diskNumber);
 
-        int pegNumber = 0;
 
-        for(int i = 0; i < diskLayout.length; i++){
-            for(int j = 0; j < diskLayout[i].length; j++){
-                if(diskLayout[i][j] == diskNumber){
-                    pegNumber = j;
-                    break;
-                }
-            }
-            if(pegNumber != 0){
-                break;
-            }
-        }
-
-        boolean canBeDraggable = true;
-
+        int min = diskLayout[pegNumber][0];
         for(int i = 0; i < diskLayout[pegNumber].length; i++){
-            if(diskLayout[pegNumber][i] > diskNumber){
-                canBeDraggable = false;
+            if(diskLayout[pegNumber][i] < min && diskLayout[pegNumber][i] > 0){
+                min = diskLayout[pegNumber][i];
             }
         }
 
-        isDraggable = canBeDraggable;
+        if(min == diskNumber){
+            isDraggable = true;
+
+            Rectangle rectangle = (Rectangle) mouseEvent.getSource();
+            startingX = rectangle.getX();
+            startingY = rectangle.getY();
+        }
         System.out.println(isDraggable);
     }
 
     public void dropDisk(MouseEvent mouseEvent) {
         //System.out.println(mouseEvent);
 
+        if(!isDraggable) return;
         isDraggable = false;
 
         double x = mouseEvent.getX();
 
-        int newSpot = 0;
+        int newPegNumber = 0;
 
         for (int terrtiory : territories) {
-            //System.out.println("x: "  + x + " - " + terrtiory);
             if (x > terrtiory) {
-                newSpot++;
+                newPegNumber++;
             } else {
                 break;
             }
         }
 
-        //System.out.println("Dropped " + newSpot + " from territories");
-
+        //System.out.println("Dropped " + newPegNumber + " from territories");
 
         //put on new peg if it possible
-        int diskNumber = getDiskNumber(mouseEvent);
+        Rectangle rectangle = (Rectangle) mouseEvent.getSource();
 
+        int diskNumber = getDiskNumber(rectangle);
 
+        if(newPegNumber == getDisksCurrentPegNumber(diskNumber)){
+            //put back
+            rectangle.setX(startingX);
+            rectangle.setY(startingY);
+
+            return;
+        }
+
+        boolean canBeDroppable = false;
+        int newLocation = 0;
+
+        for(int i = 0; i < diskLayout[newPegNumber].length; i++){
+            if(diskLayout[newPegNumber][i] == 0 || diskLayout[newPegNumber][i] > diskNumber){
+                canBeDroppable = true;
+                if(diskLayout[newPegNumber][i] != 0){
+                    newLocation = i;
+                }
+            }
+        }
+
+        if(!canBeDroppable){
+            //put back
+            rectangle.setX(startingX);
+            rectangle.setY(startingY);
+        }
+        else{
+            //put on another peg
+            int oldX = 0;
+            int oldY = 0;
+
+            for(int i = 0; i < diskLayout.length; i++){
+                for(int j = 0; j < diskLayout[i].length; j++){
+                    if(diskLayout[i][j] == diskNumber){
+                        diskLayout[i][j] = 0;
+                        oldX = i;
+                        oldY = j;
+                        break;
+                    }
+                }
+            }
+
+            diskLayout[newPegNumber][newLocation] = diskNumber;
+
+            for (int[] ints : diskLayout) {
+                for (int anInt : ints) {
+                    System.out.print(anInt + " ");
+                }
+                System.out.println();
+            }
+            System.out.println();
+
+            //move
+            rectangle.setX((newPegNumber - oldX) * 195.0);
+            rectangle.setY((newLocation - oldY) * -20.0);
+        }
     }
 
     public void dragDisk(MouseEvent mouseEvent) {
@@ -100,9 +152,7 @@ public class HanoiController implements Initializable {
         }
     }
 
-    public int getDiskNumber(MouseEvent mouseEvent) {
-        Rectangle rectangle = (Rectangle) mouseEvent.getSource();
-
+    public int getDiskNumber(Rectangle rectangle) {
         double width = rectangle.getWidth();
 
         int diskNumber = 0;
@@ -115,6 +165,17 @@ public class HanoiController implements Initializable {
         }
 
         return diskNumber;
+    }
+
+    public int getDisksCurrentPegNumber(int diskNumber) {
+        for(int i = 0; i < diskLayout.length; i++){
+            for(int j = 0; j < diskLayout[i].length; j++){
+                if(diskLayout[i][j] == diskNumber){
+                    return i;
+                }
+            }
+        }
+        return -1;
     }
 
     @Override
