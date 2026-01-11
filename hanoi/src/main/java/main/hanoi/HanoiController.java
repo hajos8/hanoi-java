@@ -104,15 +104,20 @@ public class HanoiController implements Initializable {
         for(int i = 0; i < diskLayout[newPegNumber].length; i++){
             if(diskLayout[newPegNumber][i] == 0 || diskLayout[newPegNumber][i] > diskNumber){
                 canBeDroppable = true;
-                if(diskLayout[newPegNumber][i] != 0){
-                    newLocation++;
-                }
+            }
+            else{
+                break;
+            }
+        }
+        for(int i = 0; i < diskLayout[newPegNumber].length; i++){
+            if(diskLayout[newPegNumber][i] != 0){
+                newLocation++;
             }
         }
 
-        //System.out.println("Can be droppable: " + canBeDroppable);
-        //System.out.println("New peg number: " + newPegNumber);
-        //System.out.println("New location: " + newLocation);
+        System.out.println("Can be droppable: " + canBeDroppable);
+        System.out.println("New peg number: " + newPegNumber);
+        System.out.println("New location: " + newLocation);
 
         if(!canBeDroppable){
             //put back
